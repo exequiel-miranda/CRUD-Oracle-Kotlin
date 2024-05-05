@@ -1,7 +1,6 @@
 package bryan.miranda.crudbryan2a
 
 import RecyclerViewHelper.Adaptador
-import android.annotation.SuppressLint
 import modelo.dataClassProductos
 import android.os.Bundle
 import android.widget.Button
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import modelo.ClaseConexion
@@ -80,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 addProducto.setInt(3, txtCantidad.text.toString().toInt())
                 addProducto.executeUpdate()
 
-                //Actualizar la lista de productos
+                //Luego de guardarlos: Actualizar la lista de productos
                 val nuevosProductos = obtenerProductos()
                 withContext(Dispatchers.Main) {
                     // Actualizar el adaptador con los nuevos datos
@@ -88,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
 
