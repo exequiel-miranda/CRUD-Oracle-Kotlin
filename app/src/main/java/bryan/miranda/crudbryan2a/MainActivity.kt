@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         fun obtenerProductos(): List<dataClassProductos> {
             val connection = ClaseConexion().cadenaConexion()
             val statement = connection?.createStatement()
-            val resultSet = statement?.executeQuery("SELECT * FROM productostb")!!
+            val resultSet = statement?.executeQuery("SELECT * FROM tbproductos")!!
             val productos = mutableListOf<dataClassProductos>()
             while (resultSet.next()) {
                 val nombre = resultSet.getString("nombreProducto")
@@ -72,7 +72,8 @@ class MainActivity : AppCompatActivity() {
                 val claseC = ClaseConexion().cadenaConexion()
 
                 //2- creo una variable que contenga un PrepareStatement
-                val addProducto = claseC?.prepareStatement("insert into productostb(nombreProducto, precio, cantidad) values(?, ?, ?)")!!
+                val addProducto =
+                    claseC?.prepareStatement("insert into tbproductos(nombreProducto, precio, cantidad) values(?, ?, ?)")!!
                 addProducto.setString(1, txtNombre.text.toString())
                 addProducto.setInt(2, txtPrecio.text.toString().toInt())
                 addProducto.setInt(3, txtCantidad.text.toString().toInt())
@@ -86,6 +87,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+
     }
 
 
