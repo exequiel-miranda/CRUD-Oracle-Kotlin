@@ -69,8 +69,6 @@ class Adaptador(private var Datos: List<dataClassProductos>) : RecyclerView.Adap
         }
 
         Datos = listaDatos.toList()
-        //Quito los datos de la lista
-        notifyItemRemoved(posicion)
         //Le notifico al adaptador
         notifyDataSetChanged()
     }

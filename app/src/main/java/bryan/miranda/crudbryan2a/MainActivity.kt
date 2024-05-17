@@ -48,8 +48,9 @@ class MainActivity : AppCompatActivity() {
             val resultSet = statement?.executeQuery("SELECT * FROM tbproductos")!!
             val productos = mutableListOf<dataClassProductos>()
             while (resultSet.next()) {
+                val uuid = resultSet.getString("uuid")
                 val nombre = resultSet.getString("nombreProducto")
-                val producto = dataClassProductos(nombre)
+                val producto = dataClassProductos(nombre, uuid)
                 productos.add(producto)
             }
             return productos
