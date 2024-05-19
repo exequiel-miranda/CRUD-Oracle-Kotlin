@@ -1,13 +1,10 @@
 package bryan.miranda.crudbryan2a
 
 import RecyclerViewHelper.Adaptador
-import modelo.dataClassProductos
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import modelo.ClaseConexion
+import modelo.dataClassProductos
 import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
@@ -42,8 +39,6 @@ class MainActivity : AppCompatActivity() {
         rcvProductos.layoutManager = LinearLayoutManager(this)
 
         //////////////TODO: Mostrar datos//////////////////
-
-        //Funcion para obtener datos
         fun obtenerProductos(): List<dataClassProductos> {
             val connection = ClaseConexion().cadenaConexion()
             val statement = connection?.createStatement()
@@ -52,7 +47,9 @@ class MainActivity : AppCompatActivity() {
             while (resultSet.next()) {
                 val uuid = resultSet.getString("uuid")
                 val nombre = resultSet.getString("nombreProducto")
-                val producto = dataClassProductos(nombre, uuid)
+                val precio = resultSet.getInt("precio")
+                val cantidad = resultSet.getInt("cantidad")
+                val producto = dataClassProductos(uuid, nombre, precio, cantidad)
                 productos.add(producto)
             }
             return productos
@@ -94,26 +91,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    /*
-    fun actualizarRegistro(nombreProducto: String, uuid: String, adaptador: Adaptador) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val claseC = ClaseConexion().cadenaConexion()
-            val addProducto = claseC?.prepareStatement("update tbproductos set nombreProducto = ? where uuid = ?")!!
-            addProducto.setString(1, nombreProducto)
-            addProducto.setString(2, uuid)
-            addProducto.executeUpdate()
-
-            val commit = claseC.prepareStatement("commit")!!
-            commit.executeUpdate()
-
-            withContext(Dispatchers.Main) {
-                adaptador.updateItem(uuid, nombreProducto)
-            }
-        }
-    }
-
-*/
-
 }
 

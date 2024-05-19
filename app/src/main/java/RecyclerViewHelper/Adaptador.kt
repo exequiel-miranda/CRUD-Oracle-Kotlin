@@ -1,23 +1,20 @@
 package RecyclerViewHelper
 
 import android.app.AlertDialog
-import android.content.ClipData
-import android.content.Context
-import android.media.RouteListingPreference
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
-import bryan.miranda.crudbryan2a.MainActivity
 import bryan.miranda.crudbryan2a.R
+import bryan.miranda.crudbryan2a.detallesProducto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import modelo.ClaseConexion
 import modelo.dataClassProductos
-import java.util.UUID
+
 
 class Adaptador(private var Datos: List<dataClassProductos>) : RecyclerView.Adapter<ViewHolder>() {
     fun actualizarLista(nuevaLista: List<dataClassProductos>) {
@@ -26,9 +23,9 @@ class Adaptador(private var Datos: List<dataClassProductos>) : RecyclerView.Adap
     }
 
     fun actualizarItem(uuid: String, nuevoNombre: String) {
-            val index = Datos.indexOfFirst { it.uuid == uuid }
-            Datos[index].nombre = nuevoNombre
-            notifyItemChanged(index)
+        val index = Datos.indexOfFirst { it.uuid == uuid }
+        Datos[index].nombre = nuevoNombre
+        notifyItemChanged(index)
     }
 
     ///////////////////TODO: Eliminar datos////////////////////////
@@ -64,7 +61,8 @@ class Adaptador(private var Datos: List<dataClassProductos>) : RecyclerView.Adap
     fun actualizarRegistro(nombreProducto: String, uuid: String) {
         GlobalScope.launch(Dispatchers.IO) {
             val claseC = ClaseConexion().cadenaConexion()
-            val addProducto = claseC?.prepareStatement("update tbproductos set nombreProducto = ? where uuid = ?")!!
+            val addProducto =
+                claseC?.prepareStatement("update tbproductos set nombreProducto = ? where uuid = ?")!!
             addProducto.setString(1, nombreProducto)
             addProducto.setString(2, uuid)
             addProducto.executeUpdate()
@@ -77,6 +75,7 @@ class Adaptador(private var Datos: List<dataClassProductos>) : RecyclerView.Adap
             }
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val vista = LayoutInflater.from(parent.context).inflate(R.layout.iitem_card, parent, false)
 
@@ -132,6 +131,30 @@ class Adaptador(private var Datos: List<dataClassProductos>) : RecyclerView.Adap
 
             val dialog = builder.create()
             dialog.show()
-            }
         }
+
+        //TODO: darle clic a la card
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, detallesProducto::class.java)
+            intent.putExtra(
+                "productoId",
+                item.uuid
+            )
+            intent.putExtra(
+                "nombre",
+                item.nombre
+            )
+            intent.putExtra(
+                "precio",
+                item.precio
+            )
+            intent.putExtra(
+                "cantidad",
+                item.cantidad
+            )
+            context.startActivity(intent)
+        }
+
     }
+}
