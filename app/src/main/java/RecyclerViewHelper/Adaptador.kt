@@ -86,10 +86,8 @@ class Adaptador(private var Datos: List<dataClassProductos>) : RecyclerView.Adap
     override fun getItemCount() = Datos.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val producto = Datos[position]
-        holder.textView.text = producto.nombre
-
         val item = Datos[position]
+        holder.textView.text = item.nombre
 
         //TODO: icono de Borrar
         holder.imgBorrar.setOnClickListener {
@@ -117,10 +115,11 @@ class Adaptador(private var Datos: List<dataClassProductos>) : RecyclerView.Adap
         holder.imgEditar.setOnClickListener {
             val context = holder.itemView.context
 
-            val builder = android.app.AlertDialog.Builder(context)
+            val builder = AlertDialog.Builder(context)
             builder.setTitle("Editar nombre")
 
             val input = EditText(context)
+            input.setHint(item.nombre)
             builder.setView(input)
 
             builder.setPositiveButton("Actualizar") { dialog, which ->
