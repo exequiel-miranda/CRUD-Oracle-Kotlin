@@ -6,9 +6,9 @@ import java.sql.DriverManager
 class ClaseConexion {
     public fun cadenaConexion(): Connection? {
         try {
-            val url = "jdbc:oracle:thin:@10.10.0.53:1521:xe"
+            val url = "jdbc:oracle:thin:@192.168.191.79:1521:xe"
             val usuario = "system"
-            val contrasena = "desarrollo"
+            val contrasena = "itr2023"
 
             val connection = DriverManager.getConnection(url, usuario, contrasena)
             return connection

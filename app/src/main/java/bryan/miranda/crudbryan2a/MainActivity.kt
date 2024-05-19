@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import modelo.ClaseConexion
+import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,10 +78,11 @@ class MainActivity : AppCompatActivity() {
 
                 //2- creo una variable que contenga un PrepareStatement
                 val addProducto =
-                    claseC?.prepareStatement("insert into tbproductos(nombreProducto, precio, cantidad) values(?, ?, ?)")!!
-                addProducto.setString(1, txtNombre.text.toString())
-                addProducto.setInt(2, txtPrecio.text.toString().toInt())
-                addProducto.setInt(3, txtCantidad.text.toString().toInt())
+                    claseC?.prepareStatement("insert into tbproductos(uuid, nombreProducto, precio, cantidad) values(?, ?, ?, ?)")!!
+                addProducto.setString(1, UUID.randomUUID().toString())
+                addProducto.setString(2, txtNombre.text.toString())
+                addProducto.setInt(3, txtPrecio.text.toString().toInt())
+                addProducto.setInt(4, txtCantidad.text.toString().toInt())
                 addProducto.executeUpdate()
 
                 //Luego de guardarlos: Actualizar la lista de productos
@@ -91,5 +94,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    /*
+    fun actualizarRegistro(nombreProducto: String, uuid: String, adaptador: Adaptador) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val claseC = ClaseConexion().cadenaConexion()
+            val addProducto = claseC?.prepareStatement("update tbproductos set nombreProducto = ? where uuid = ?")!!
+            addProducto.setString(1, nombreProducto)
+            addProducto.setString(2, uuid)
+            addProducto.executeUpdate()
+
+            val commit = claseC.prepareStatement("commit")!!
+            commit.executeUpdate()
+
+            withContext(Dispatchers.Main) {
+                adaptador.updateItem(uuid, nombreProducto)
+            }
+        }
+    }
+
+*/
+
 }
 
